@@ -6,7 +6,19 @@ import { Stars } from "../_icons/stars";
 import { Textarea } from "@/components/ui/textarea";
 import { Contents } from "./contents";
 import { XButton } from "../_icons/xButton";
-import { GoogleGenAI } from "@google/genai";
+
+type Article = {
+  id: string;
+  title: string;
+  summary: string;
+  content: string;
+  userId: string;
+};
+
+type HistoryItem = {
+  id: string;
+  title: string;
+};
 
 export default function QuizGenerator() {
   const [page, setPage] = useState(1);
@@ -15,12 +27,37 @@ export default function QuizGenerator() {
 
   const [inputValueOne, setInputValueOne] = useState("");
   const [inputValueTwo, setInputValueTwo] = useState("");
+  const [test, setTest] = useState<Article | null>(null);
   const [history, setHistory] = useState(true);
+  const [generating, setGenerating] = useState(false);
 
   const [image, setImage] = useState(false);
 
+  const [historyArticle, setHistoryArticle] = useState<HistoryItem[]>([]);
+
+  const getHistory = async () => {
+    try {
+      const res = await fetch("/api/articles");
+      if (!res.ok) throw new Error("Failed to fetch history");
+
+      const data = await res.json();
+      setHistoryArticle(data.history);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const historyButton = async () => {
+    await getHistory();
+    setHistory(false);
+  };
+
   const postArticle = async () => {
     try {
+      setGenerating(true);
+      if (inputValueOne.length === 0) return;
+      if (inputValueTwo.length === 0) return;
+
       const res = await fetch("/api/article", {
         method: "POST",
         headers: {
@@ -36,16 +73,13 @@ export default function QuizGenerator() {
         throw new Error("Failed to create article");
       }
       const article = await res.json();
+      setTest(article.result);
       console.log("Created article:", article);
+      setGenerating(false);
+      setPage(2);
     } catch (err) {
       console.error(err);
     }
-  };
-
-  const secondPage = () => {
-    if (inputValueOne.length === 0) return;
-    if (inputValueTwo.length === 0) return;
-    setPage(2);
   };
 
   return (
@@ -65,10 +99,7 @@ export default function QuizGenerator() {
         {/* history side button */}
         {history && (
           <div className="h-full w-18 border-r border-[#E4E4E7] flex justify-center items-start pt-6">
-            <button
-              onClick={() => setHistory(false)}
-              className="cursor-pointer"
-            >
+            <button onClick={() => historyButton()} className="cursor-pointer">
               <History />
             </button>
           </div>
@@ -76,7 +107,7 @@ export default function QuizGenerator() {
         {/* history window */}
         {!history && (
           <div className="h-full w-100 border-r border-[#E4E4E7]">
-            <div className="flex ml-6 mt-4 mr-6 mb-2 items-center justify-between">
+            <div className="flex ml-6 mt-4 mr-6 mb-[18px] items-center justify-between">
               <p className=" text-[20px] font-semibold">History</p>
               <button
                 onClick={() => setHistory(true)}
@@ -86,7 +117,19 @@ export default function QuizGenerator() {
               </button>
             </div>
             {/* here should the history be mapped */}
-            <div></div>
+            <div className="w-full overflow-y-scroll">
+              <div className="text-base font-medium flex flex-col">
+                {historyArticle.map((item) => (
+                  <button
+                    key={item.id}
+                    className="cursor-pointer hover:bg-gray-100 h-12 flex items-center pl-4 duration-200"
+                    // onClick={}
+                  >
+                    {item.title}
+                  </button>
+                ))}
+              </div>
+            </div>
           </div>
         )}
 
@@ -146,13 +189,12 @@ export default function QuizGenerator() {
                     inputValueOne.length > 0 && inputValueTwo.length > 0
                       ? "bg-[#18181B] cursor-pointer hover:bg-[#18181B]/75 duration-200"
                       : "bg-[#18181B]/25"
-                  }`}
+                  } ${generating ? "bg-gray-200" : ""}`}
                   onClick={() => {
-                    secondPage();
                     postArticle();
                   }}
                 >
-                  Generate summary
+                  {generating ? "Generating..." : "Generate summary"}
                 </button>
               </div>
             </div>
@@ -162,6 +204,7 @@ export default function QuizGenerator() {
               setPage={setPage}
               viewContent={viewContent}
               setViewContent={setViewContent}
+              test={test}
             />
           )}
         </div>
@@ -187,10 +230,10 @@ export default function QuizGenerator() {
       {viewContent && (
         <div className="bg-black w-screen h-screen absolute opacity-50 backdrop-blur-md"></div>
       )}
-      {viewContent && (
+      {viewContent && test && (
         <div className="min-h-50 w-[492px] border rounded-lg bg-white absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col gap-4 p-7">
           <div className="flex justify-between items-center">
-            <p className="text-[24px] font-semibold"> *This is a test* </p>
+            <p className="text-[24px] font-semibold"> {test.title} </p>
             <button
               className="w-12 h-10 border rounded-md flex justify-center items-center cursor-pointer hover:bg-gray-100 duration-200"
               onClick={() => setViewContent(false)}
@@ -198,9 +241,7 @@ export default function QuizGenerator() {
               <XButton />
             </button>
           </div>
-          <p>
-            *This will be the content inside the input that you have put in.*
-          </p>
+          <p>{test.content}</p>
         </div>
       )}
     </div>

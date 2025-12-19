@@ -1,18 +1,26 @@
-"use client";
 import { Stars } from "../_icons/stars";
 import { Book } from "../_icons/book";
 import { BackArrow } from "../_icons/backArrow";
-import { useState } from "react";
 
 type ContentsProps = {
   setPage: React.Dispatch<React.SetStateAction<number>>;
   viewContent: boolean;
   setViewContent: React.Dispatch<React.SetStateAction<boolean>>;
+  test: Article | any;
+};
+
+type Article = {
+  id: string;
+  title: string;
+  summary: string;
+  content: string;
+  userId: string;
 };
 
 export const Contents = ({
   setPage,
   viewContent,
+  test,
   setViewContent,
 }: ContentsProps) => {
   return (
@@ -42,11 +50,8 @@ export const Contents = ({
             </div>
           </div>
           <div>
-            <p className="text-[24px] font-semibold">*This is a test*</p>
-            <p>
-              {" "}
-              *This will be the content inside the input that you have put in.*{" "}
-            </p>
+            <p className="text-[24px] font-semibold">{test.title}</p>
+            <p>{test.summary}</p>
           </div>
         </div>
         <div className="flex justify-between items-center">
