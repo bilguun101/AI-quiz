@@ -25,7 +25,6 @@ export const POST = async (request: Request) => {
         ],
       },
     });
-    console.log(result);
     const summary = result.candidates?.[0]?.content?.parts?.[0]?.text;
 
     if (!summary) {
@@ -44,15 +43,5 @@ export const POST = async (request: Request) => {
   } catch (err) {
     console.log(err);
     return new Response("Failed", { status: 400 });
-  }
-};
-
-export const GET = async (request: Request) => {
-  try {
-    const articles = await prisma.article.findMany();
-    return new Response(JSON.stringify({ articles }), { status: 200 });
-  } catch (err) {
-    console.log(err);
-    return new Response("Failed to fetch all articles", { status: 500 });
   }
 };
