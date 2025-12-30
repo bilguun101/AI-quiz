@@ -1,12 +1,10 @@
 "use client";
 import { Stars } from "@/app/_icons/stars";
-// import { useRouter } from "next/navigation";
 import { XButton } from "../_icons/xButton";
 import { useState } from "react";
 
 type ContentsProps = {
   viewContent: boolean;
-  setViewContent: React.Dispatch<React.SetStateAction<boolean>>;
   test: Article | any;
   setCancel: React.Dispatch<React.SetStateAction<boolean>>;
 };
@@ -19,14 +17,8 @@ type Article = {
   userId: string;
 };
 
-export const QuizTable = ({ setViewContent, setCancel }: ContentsProps) => {
-  //   const router = useRouter();
-
-  //   const handlePushToQuizGenerator = () => {
-  //     router.push("/quizGenerator");
-  //   };
-
-  const [questions, setQuestions] = useState(1);
+export const QuizTable = ({ setCancel }: ContentsProps) => {
+  const [questions, setQuestions] = useState();
 
   return (
     <div className="mt-15 flex flex-col gap-6">
@@ -55,24 +47,27 @@ export const QuizTable = ({ setViewContent, setCancel }: ContentsProps) => {
             <p className="text-xl font-medium">
               This is a question related to the content.
             </p>
-            <p className="text-xl font-medium"> 1/5 </p>
+            <div className="flex justify-center items-center gap-[6px]">
+              <p className="text-xl font-medium"> 1 </p>
+              <p className="text-[#737373] font-medium"> / 5 </p>
+            </div>
           </div>
           <div className="flex flex-wrap justify-center gap-3 min-h-[96px]">
             <button
               className="rounded-md border-gray-200 border w-[243px] min-h-10 cursor-pointer hover:bg-gray-100 duration-200 flex justify-center items-center font-medium text-wrap text-center"
-              onClick={() => setQuestions(2)}
+              //   onClick={() => setQuestions()}
             >
               answer
             </button>
             <button
               className="rounded-md border-gray-200 border w-[243px] min-h-10 cursor-pointer hover:bg-gray-100 duration-200 flex justify-center items-center font-medium text-wrap text-center"
-              onClick={() => setQuestions(2)}
+              //   onClick={() => setQuestions()}
             >
               answer
             </button>
             <button
               className="rounded-md border-gray-200 border w-[243px] min-h-10 cursor-pointer hover:bg-gray-100 duration-200 flex justify-center items-center font-medium text-wrap text-center"
-              onClick={() => setQuestions(2)}
+              //   onClick={() => setQuestions()}
             >
               answer
             </button>

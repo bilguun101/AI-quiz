@@ -28,6 +28,7 @@ export default function ArticlePage() {
   const [generating, setGenerating] = useState(false);
   const [image, setImage] = useState(false);
   const [historyArticle, setHistoryArticle] = useState<HistoryItem[]>([]);
+  const [loading, setLoading] = useState(false);
 
   const getHistory = async () => {
     try {
@@ -42,8 +43,10 @@ export default function ArticlePage() {
   };
 
   const historyButton = async () => {
+    setLoading(true);
     await getHistory();
     setHistory(false);
+    setLoading(false);
   };
 
   const getArticle = async (id: string) => {
@@ -92,7 +95,10 @@ export default function ArticlePage() {
         {/* history side button */}
         {history && (
           <div className="h-full w-18 border-r border-[#E4E4E7] flex justify-center items-start pt-6">
-            <button onClick={() => historyButton()} className="cursor-pointer">
+            <button
+              onClick={() => historyButton()}
+              className={`${loading ? "cursor-wait" : "cursor-pointer"}`}
+            >
               <History />
             </button>
           </div>

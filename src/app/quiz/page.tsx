@@ -25,7 +25,7 @@ export default function Quiz() {
 
   const router = useRouter();
   const handleCancelQuiz = () => {
-    router.push("/quizGenerator");
+    router.push("/");
   };
 
   const [viewContent, setViewContent] = useState(false);
@@ -144,7 +144,6 @@ export default function Quiz() {
           {/* generator */}
           <QuizTable
             viewContent={viewContent}
-            setViewContent={setViewContent}
             test={test}
             setCancel={setCancel}
           />
