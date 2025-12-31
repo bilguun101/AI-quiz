@@ -33,7 +33,6 @@ export default function ArticlePage() {
   const [test, setTest] = useState<Article | null>(null);
   const [history, setHistory] = useState(true);
   const [generating, setGenerating] = useState(false);
-  const [image, setImage] = useState(false);
   const [historyArticle, setHistoryArticle] = useState<HistoryItem[]>([]);
   const [loading, setLoading] = useState(false);
 
@@ -157,22 +156,7 @@ export default function ArticlePage() {
         </div>
       </div>
       {/* popup image */}
-      {image && (
-        <div
-          onClick={() => setImage(false)}
-          className="bg-black w-screen h-screen absolute opacity-50 cursor-pointer backdrop-blur-md"
-        ></div>
-      )}
-      {image && (
-        <div className="w-150 h-150 rounded-full absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 border-3 border-red-400">
-          <img
-            src="/angry-cat.jpg"
-            alt="profile"
-            className="w-full h-full object-cover rounded-full cursor-pointer"
-            onClick={() => setImage(false)}
-          />
-        </div>
-      )}
+
       {/* second page content viewer */}
       {viewContent && (
         <div className="bg-black w-screen h-screen absolute opacity-50 backdrop-blur-md"></div>

@@ -4,9 +4,8 @@ import { BackArrow } from "@/app/_icons/backArrow";
 import { useRouter } from "next/navigation";
 
 type ContentsProps = {
-  viewContent: boolean;
   setViewContent: React.Dispatch<React.SetStateAction<boolean>>;
-  test: Article | any;
+  test: Article | null;
 };
 
 type Article = {
@@ -17,11 +16,7 @@ type Article = {
   userId: string;
 };
 
-export const ArticleContent = ({
-  viewContent,
-  test,
-  setViewContent,
-}: ContentsProps) => {
+export const ArticleContent = ({ test, setViewContent }: ContentsProps) => {
   const router = useRouter();
 
   const handlePushToQuizGenerator = () => {
