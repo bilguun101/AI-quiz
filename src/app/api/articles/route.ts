@@ -4,7 +4,15 @@ import { NextResponse } from "next/server";
 
 export const GET = async (request: Request) => {
   try {
+    const { searchParams } = new URL(request.url);
+    const clerkId = searchParams.get("userId") || "";
+
+    const user = await prisma.user.findFirst({ where: { clerkId } });
+
     const historyTitle = await prisma.article.findMany({
+      where: {
+        userId: user?.id,
+      },
       select: {
         id: true,
         title: true,

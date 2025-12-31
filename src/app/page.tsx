@@ -1,5 +1,5 @@
 "use client";
-import { ReactNode, useState } from "react";
+import { useState } from "react";
 import { File } from "./_icons/file";
 import { History } from "./_icons/history";
 import { Stars } from "./_icons/stars";
@@ -13,6 +13,7 @@ import {
   SignedIn,
   SignedOut,
   UserButton,
+  useUser,
 } from "@clerk/nextjs";
 
 type Article = {
@@ -28,8 +29,9 @@ type HistoryItem = {
   title: string;
 };
 
-export default function Home({ children }: { children: ReactNode }) {
+export default function Home() {
   const router = useRouter();
+  const { user } = useUser();
 
   const handleHistorySummary = (id: string) => {
     router.push(`/article/${id}`);
@@ -51,7 +53,7 @@ export default function Home({ children }: { children: ReactNode }) {
 
   const getHistory = async () => {
     try {
-      const res = await fetch("/api/articles");
+      const res = await fetch(`/api/articles?userId=${user?.id}`);
       if (!res.ok) throw new Error("Failed to fetch history");
 
       const data = await res.json();
@@ -82,7 +84,7 @@ export default function Home({ children }: { children: ReactNode }) {
         body: JSON.stringify({
           title: inputValueOne,
           content: inputValueTwo,
-          userId: "123abc",
+          userId: user?.id,
         }),
       });
       if (!res.ok) {

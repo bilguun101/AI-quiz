@@ -14,6 +14,12 @@ export const POST = async (request: Request) => {
       return NextResponse.json({ error: "Missing fields" }, { status: 400 });
     }
 
+    const user = await prisma.user.findFirst({ where: { clerkId: userId } });
+
+    if (!user) {
+      return NextResponse.json({ error: "User not found" }, { status: 404 });
+    }
+
     const result = await key.models.generateContent({
       model: "gemini-2.5-flash",
       contents: {
@@ -33,10 +39,10 @@ export const POST = async (request: Request) => {
 
     const article = await prisma.article.create({
       data: {
-        title: title,
-        content: content,
-        summary: summary,
-        userId: userId,
+        title,
+        content,
+        summary,
+        userId: user.id,
       },
     });
     return new Response(JSON.stringify({ result: article }), { status: 201 });

@@ -5,6 +5,13 @@ import { XButton } from "@/app/_icons/xButton";
 import { useParams } from "next/navigation";
 import { QuizTable } from "./quizTable";
 import { useRouter } from "next/navigation";
+import {
+  SignInButton,
+  SignUpButton,
+  SignedIn,
+  SignedOut,
+  UserButton,
+} from "@clerk/nextjs";
 
 type Article = {
   id: string;
@@ -32,7 +39,6 @@ export default function Quiz() {
   const [test, setTest] = useState<Article | null>(null);
   const [history, setHistory] = useState(true);
   const [generating, setGenerating] = useState(false);
-  const [image, setImage] = useState(false);
   const [historyArticle, setHistoryArticle] = useState<HistoryItem[]>([]);
   const [loading, setLoading] = useState(false);
   const [cancel, setCancel] = useState(false);
@@ -90,12 +96,19 @@ export default function Quiz() {
       {/* header */}
       <div className="w-full h-14 border-b border-[#E4E4E7] flex items-center justify-between pl-10 pr-10">
         <p className="text-[24px] font-semibold"> Quiz app </p>
-        <img
-          className="bg-blue-400 w-10 h-10 rounded-full cursor-pointer"
-          onClick={() => setImage(true)}
-          src="/angry-cat.jpg"
-          alt="profile"
-        />
+        <header className="flex justify-end items-center p-4 gap-4 h-16">
+          <SignedOut>
+            <SignInButton />
+            <SignUpButton>
+              <button className="bg-[#18181B] text-white rounded-full font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 cursor-pointer">
+                Sign Up
+              </button>
+            </SignUpButton>
+          </SignedOut>
+          <SignedIn>
+            <UserButton />
+          </SignedIn>
+        </header>
       </div>
       {/* bottom part */}
       <div className="w-full h-full flex">
@@ -149,23 +162,6 @@ export default function Quiz() {
           />
         </div>
       </div>
-      {/* popup image */}
-      {image && (
-        <div
-          onClick={() => setImage(false)}
-          className="bg-black w-screen h-screen absolute opacity-50 cursor-pointer backdrop-blur-md"
-        ></div>
-      )}
-      {image && (
-        <div className="w-150 h-150 rounded-full absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 border-3 border-red-400">
-          <img
-            src="/angry-cat.jpg"
-            alt="profile"
-            className="w-full h-full object-cover rounded-full cursor-pointer"
-            onClick={() => setImage(false)}
-          />
-        </div>
-      )}
       {/* second page content viewer */}
       {viewContent && (
         <div className="bg-black w-screen h-screen absolute opacity-50 backdrop-blur-md"></div>
@@ -193,7 +189,8 @@ export default function Quiz() {
           <div className="flex flex-col gap-[6px]">
             <p className="text-2xl font-semibold">Are you sure?</p>
             <p className="text-[#B91C1C] text-sm">
-              If you press 'Cancel', this quiz will restart from the beginning.
+              If you press &apos;Cancel&apos;, this quiz will restart from the
+              beginning.
             </p>
           </div>
           <div className="flex justify-between items-center">

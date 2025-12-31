@@ -25,7 +25,7 @@ export const ArticleContent = ({
   const router = useRouter();
 
   const handlePushToQuizGenerator = () => {
-    router.push("/quizGenerator");
+    router.push("/");
   };
 
   const handleTakeQuiz = () => {

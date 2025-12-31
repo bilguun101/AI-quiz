@@ -1,11 +1,11 @@
 "use client";
 import { Stars } from "@/app/_icons/stars";
 import { XButton } from "../_icons/xButton";
-import { useState } from "react";
+// import { useState } from "react";
 
 type ContentsProps = {
   viewContent: boolean;
-  test: Article | any;
+  test: Article | null;
   setCancel: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
@@ -18,7 +18,7 @@ type Article = {
 };
 
 export const QuizTable = ({ setCancel }: ContentsProps) => {
-  const [questions, setQuestions] = useState();
+  //   const [questions, setQuestions] = useState();
 
   return (
     <div className="mt-15 flex flex-col gap-6">

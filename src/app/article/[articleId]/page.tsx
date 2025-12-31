@@ -4,6 +4,13 @@ import { History } from "@/app/_icons/history";
 import { ArticleContent } from "./articleContent";
 import { XButton } from "@/app/_icons/xButton";
 import { useParams } from "next/navigation";
+import {
+  SignInButton,
+  SignUpButton,
+  SignedIn,
+  SignedOut,
+  UserButton,
+} from "@clerk/nextjs";
 
 type Article = {
   id: string;
@@ -83,12 +90,19 @@ export default function ArticlePage() {
       {/* header */}
       <div className="w-full h-14 border-b border-[#E4E4E7] flex items-center justify-between pl-10 pr-10">
         <p className="text-[24px] font-semibold"> Quiz app </p>
-        <img
-          className="bg-blue-400 w-10 h-10 rounded-full cursor-pointer"
-          onClick={() => setImage(true)}
-          src="/angry-cat.jpg"
-          alt="profile"
-        />
+        <header className="flex justify-end items-center p-4 gap-4 h-16">
+          <SignedOut>
+            <SignInButton />
+            <SignUpButton>
+              <button className="bg-[#18181B] text-white rounded-full font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 cursor-pointer">
+                Sign Up
+              </button>
+            </SignUpButton>
+          </SignedOut>
+          <SignedIn>
+            <UserButton />
+          </SignedIn>
+        </header>
       </div>
       {/* bottom part */}
       <div className="w-full h-full flex">
