@@ -32,7 +32,6 @@ export default function ArticlePage() {
   const [viewContent, setViewContent] = useState(false);
   const [test, setTest] = useState<Article | null>(null);
   const [history, setHistory] = useState(true);
-  const [generating, setGenerating] = useState(false);
   const [historyArticle, setHistoryArticle] = useState<HistoryItem[]>([]);
   const [loading, setLoading] = useState(false);
 
@@ -57,8 +56,6 @@ export default function ArticlePage() {
 
   const getArticle = async (id: string) => {
     try {
-      setGenerating(true);
-
       const res = await fetch(`/api/article/${id}`, {
         method: "GET",
         headers: {
@@ -74,7 +71,6 @@ export default function ArticlePage() {
     } catch (err) {
       console.error(err);
     } finally {
-      setGenerating(false);
     }
   };
 
@@ -148,11 +144,7 @@ export default function ArticlePage() {
         {/* generator outer div */}
         <div className="w-full h-full flex items-start justify-center pt-24 bg-gray-50">
           {/* generator */}
-          <ArticleContent
-            viewContent={viewContent}
-            setViewContent={setViewContent}
-            test={test}
-          />
+          <ArticleContent setViewContent={setViewContent} test={test} />
         </div>
       </div>
       {/* popup image */}

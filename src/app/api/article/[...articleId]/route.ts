@@ -18,7 +18,7 @@ export const GET = async (
 
     return new Response(JSON.stringify({ result: article }), { status: 200 });
   } catch (err) {
-    // console.error(err);
+    console.error(err);
     return new Response(
       JSON.stringify({ error: "Failed to fetch the article" }),
       { status: 500 }

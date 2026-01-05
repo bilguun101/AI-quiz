@@ -38,7 +38,6 @@ export default function Quiz() {
   const [viewContent, setViewContent] = useState(false);
   const [test, setTest] = useState<Article | null>(null);
   const [history, setHistory] = useState(true);
-  const [generating, setGenerating] = useState(false);
   const [historyArticle, setHistoryArticle] = useState<HistoryItem[]>([]);
   const [loading, setLoading] = useState(false);
   const [cancel, setCancel] = useState(false);
@@ -64,8 +63,6 @@ export default function Quiz() {
 
   const getArticle = async (id: string) => {
     try {
-      setGenerating(true);
-
       const res = await fetch(`/api/article/${id}`, {
         method: "GET",
         headers: {
@@ -81,7 +78,6 @@ export default function Quiz() {
     } catch (err) {
       console.error(err);
     } finally {
-      setGenerating(false);
     }
   };
 
